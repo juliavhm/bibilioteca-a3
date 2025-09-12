@@ -3,6 +3,7 @@ package service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -80,8 +81,8 @@ public class LivroService {
 		return null;
 	}
 
-	public Livro buscarPorGenero(Genero genero) {
-		return livros.stream().filter(l -> l.getGenero() == genero).findFirst().orElse(null);
+	public List<Livro> buscarPorGenero(Genero genero) {
+		return livros.stream().filter(l -> l.getGenero() == genero).collect(Collectors.toList());
 	}
 
 	private List<Livro> ordenar(Comparator<Livro> comparador) {
