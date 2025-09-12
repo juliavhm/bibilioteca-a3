@@ -30,6 +30,12 @@ public class LivroController {
 		return livro;
 	}
 
+	@PostMapping("/lista")
+	public List<Livro> adicionarListaLivros(@RequestBody List<Livro> livros) {
+		livros.forEach(livroService::adicionarLivro);
+		return livros;
+	}
+
 	@GetMapping("/buscar/titulo")
 	public ResponseEntity<?> buscarPorTitulo(@RequestParam String titulo) {
 		Livro livro = livroService.buscarPorTituloBinaria(titulo);
