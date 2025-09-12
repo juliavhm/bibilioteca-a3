@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import dto.MensagemErro;
+import model.Genero;
 import model.Livro;
 import service.LivroService;
 
@@ -50,7 +51,18 @@ public class LivroController {
 	public ResponseEntity<?> buscarPorAno(@RequestParam Integer ano) {
 		Livro livro = livroService.buscarPorAnoBinaria(ano);
 		if (livro == null)
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MensagemErro("Não existe livro com esse ano :("));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new MensagemErro("Não existe livro com esse ano :("));
 		return ResponseEntity.ok(livro);
 	}
+
+	@GetMapping("/buscar/genero")
+	public ResponseEntity<?> buscarPorGenero(@RequestParam Genero genero) {
+		Livro livro = livroService.buscarPorGenero(genero);
+		if (livro == null)
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new MensagemErro("Não existe livro com esse gênero :("));
+		return ResponseEntity.ok(livro);
+	}
+
 }

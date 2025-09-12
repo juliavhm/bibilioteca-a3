@@ -1,28 +1,19 @@
 package model;
 
 public class Livro {
-	private Integer id;
 	private String titulo;
 	private String autor;
 	private Integer ano;
-	private String genero;
+	private Genero genero;
 
 	public Livro() {
 	}
 
-	public Livro(String titulo, String autor, Integer ano, String genero) {
+	public Livro(String titulo, String autor, Integer ano, Genero genero) {
 		this.titulo = titulo;
 		this.autor = autor;
 		this.ano = ano;
 		this.genero = genero;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getTitulo() {
@@ -49,12 +40,12 @@ public class Livro {
 		this.ano = ano;
 	}
 
-	public String getGenero() {
+	public Genero getGenero() {
 		return genero;
 	}
 
-	public void setGenero(String genero) {
-		this.genero = genero;
+	public Genero setGenero(Genero genero) {
+		return this.genero = genero;
 	}
 
 }

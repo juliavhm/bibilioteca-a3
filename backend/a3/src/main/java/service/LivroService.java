@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import model.Genero;
 import model.Livro;
 
 @Service
@@ -77,6 +78,10 @@ public class LivroService {
 				direita = meio - 1;
 		}
 		return null;
+	}
+
+	public Livro buscarPorGenero(Genero genero) {
+		return livros.stream().filter(l -> l.getGenero() == genero).findFirst().orElse(null);
 	}
 
 	private List<Livro> ordenar(Comparator<Livro> comparador) {
