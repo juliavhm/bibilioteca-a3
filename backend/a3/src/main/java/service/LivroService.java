@@ -1,9 +1,7 @@
 package service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -19,97 +17,47 @@ public class LivroService {
 		livros.add(livro);
 	};
 
-	public List<Livro> listaLivros() {
+	public List<Livro> listarLivros() {
 		return livros;
 	};
 
-	public Livro buscarPorTituloBinaria(String titulo) {
-		List<Livro> ordenados = ordenarPorTitulo();
-		int esquerda = 0;
-		int direita = ordenados.size() - 1;
-
-		while (esquerda <= direita) {
-			int meio = (esquerda + direita) / 2;
-			Livro atual = ordenados.get(meio);
-			int comparacao = atual.getTitulo().compareToIgnoreCase(titulo);
-
-			if (comparacao == 0)
-				return atual;
-			else if (comparacao < 0)
-				esquerda = meio + 1;
-			else
-				direita = meio - 1;
-		}
-		return null;
-	}
-
-	public Livro buscarPorAutorBinaria(String autor) {
-		List<Livro> ordenados = ordenarPorAutor();
-		int esquerda = 0;
-		int direita = ordenados.size() - 1;
-
-		while (esquerda <= direita) {
-			int meio = (esquerda + direita) / 2;
-			Livro atual = ordenados.get(meio);
-			int comparacao = atual.getAutor().compareToIgnoreCase(autor);
-
-			if (comparacao == 0)
-				return atual;
-			else if (comparacao < 0)
-				esquerda = meio + 1;
-			else
-				direita = meio - 1;
-		}
-		return null;
-	}
-
-	public Livro buscarPorAnoBinaria(Integer ano) {
-		List<Livro> ordenados = ordenarPorAno();
-		int esquerda = 0;
-		int direita = ordenados.size() - 1;
-
-		while (esquerda <= direita) {
-			int meio = (esquerda + direita) / 2;
-			Livro atual = ordenados.get(meio);
-			if (atual.getAno().equals(ano))
-				return atual;
-			else if (atual.getAno() < ano)
-				esquerda = meio + 1;
-			else
-				direita = meio - 1;
-		}
-		return null;
-	}
-
-	public List<Livro> buscarPorGenero(Genero genero) {
-		return livros.stream().filter(l -> l.getGenero() == genero).collect(Collectors.toList());
-	}
-
-	private List<Livro> ordenar(Comparator<Livro> comparador) {
-		List<Livro> copia = new ArrayList<>(livros);
-		int n = copia.size();
-		for (int i = 0; i < n - 1; i++) {
-			for (int j = 0; j < n - i - 1; j++) {
-				if (comparador.compare(copia.get(j), copia.get(j + 1)) > 0) {
-					Livro temp = copia.get(j);
-					copia.set(j, copia.get(j + 1));
-					copia.set(j + 1, temp);
-				}
+	public List<Livro> buscarPorAnoLinear(Integer ano) {
+		List<Livro> resultados = new ArrayList<>();
+		for (Livro livro : livros) {
+			if (livro.getAno().equals(ano)) {
+				resultados.add(livro);
 			}
 		}
-		return copia;
-	}
+		return resultados;
+	};
 
-	public List<Livro> ordenarPorTitulo() {
-		return ordenar((a, b) -> a.getTitulo().compareToIgnoreCase(b.getTitulo()));
-	}
+	public List<Livro> buscarPorAutorLinear(String autor) {
+		List<Livro> resultados = new ArrayList<>();
+		for (Livro livro : livros) {
+			if (livro.getAutor().equalsIgnoreCase(autor)) {
+				resultados.add(livro);
+			}
+		}
+		return resultados;
+	};
 
-	public List<Livro> ordenarPorAutor() {
-		return ordenar((a, b) -> a.getAutor().compareToIgnoreCase(b.getAutor()));
-	}
+	public Livro buscarPorTituloLinear(String titulo) {
+		for (Livro livro : livros) {
+			if (livro.getTitulo().equals(titulo)) {
+				return livro;
+			}
+		}
+		return null;
+	};
 
-	public List<Livro> ordenarPorAno() {
-		return ordenar((a, b) -> a.getAno().compareTo(b.getAno()));
-	}
+	public List<Livro> buscarPorGenero(Genero genero) {
+		List<Livro> resultados = new ArrayList<>();
+		for (Livro livro : livros) {
+			if (livro.getGenero() == genero) {
+				resultados.add(livro);
+			}
+		}
+		return resultados;
+	};
 
 }

@@ -21,7 +21,7 @@ public class LivroController {
 
 	@GetMapping
 	public List<Livro> listarLivros() {
-		return livroService.listaLivros();
+		return livroService.listarLivros();
 	}
 
 	@PostMapping
@@ -32,7 +32,7 @@ public class LivroController {
 
 	@GetMapping("titulo/{titulo}")
 	public ResponseEntity<?> buscarPorTitulo(@PathVariable String titulo) {
-		Livro livro = livroService.buscarPorTituloBinaria(titulo);
+		Livro livro = livroService.buscarPorTituloLinear(titulo);
 		if (livro == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MensagemErro("Livro não encontrado :("));
 		}
@@ -41,31 +41,31 @@ public class LivroController {
 
 	@GetMapping("/autor/{autor}")
 	public ResponseEntity<?> buscarPorAutor(@PathVariable String autor) {
-		Livro livro = livroService.buscarPorAutorBinaria(autor);
-		if (livro == null)
+		List<Livro> livro = livroService.buscarPorAutorLinear(autor);
+		if (livro.isEmpty())
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MensagemErro("Autor não encontrado :("));
 		return ResponseEntity.ok(livro);
 	};
 
 	@GetMapping("/ano/{ano}")
 	public ResponseEntity<?> buscarPorAno(@PathVariable Integer ano) {
-		Livro livro = livroService.buscarPorAnoBinaria(ano);
-		if (livro == null)
+		List<Livro> livro = livroService.buscarPorAnoLinear(ano);
+		if (livro.isEmpty())
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new MensagemErro("Não existe livro com esse ano :("));
+					.body(new MensagemErro("Nenhum livro com esse ano :("));
 		return ResponseEntity.ok(livro);
 	};
 
 	@GetMapping("/genero/{genero}")
 	public ResponseEntity<?> buscarPorGenero(@PathVariable Genero genero) {
-	    List<Livro> livros = livroService.buscarPorGenero(genero);
-	    
-	    if (livros.isEmpty()) {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	                             .body(new MensagemErro("Não existem livros com esse gênero :("));
-	    }
-	    
-	    return ResponseEntity.ok(livros);
-	}
+		List<Livro> livros = livroService.buscarPorGenero(genero);
+
+		if (livros.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new MensagemErro("Não existe livros com esse gênero :("));
+		}
+
+		return ResponseEntity.ok(livros);
+	};
 
 };
