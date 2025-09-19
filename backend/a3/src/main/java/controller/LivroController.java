@@ -51,8 +51,7 @@ public class LivroController {
 	public ResponseEntity<?> buscarPorAno(@PathVariable Integer ano) {
 		List<Livro> livro = livroService.buscarPorAnoLinear(ano);
 		if (livro.isEmpty())
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new MensagemErro("Nenhum livro com esse ano :("));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MensagemErro("Nenhum livro com esse ano :("));
 		return ResponseEntity.ok(livro);
 	};
 
@@ -66,6 +65,21 @@ public class LivroController {
 		}
 
 		return ResponseEntity.ok(livros);
+	};
+
+	@GetMapping("/buscar")
+	public ResponseEntity<?> buscarEOrdenar(@RequestParam(required = false) String titulo,
+			@RequestParam(required = false) String autor, @RequestParam(required = false) Integer ano,
+			@RequestParam(required = false) Genero genero, @RequestParam(required = false) String ordenar) {
+
+		List<Livro> resultados = livroService.buscarEOrdenar(titulo, autor, ano, genero, ordenar);
+
+		if (resultados.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new MensagemErro("Nenhum livro encontrado com os critérios fornecidos :("));
+		}
+
+		return ResponseEntity.ok(resultados);
 	};
 
 };

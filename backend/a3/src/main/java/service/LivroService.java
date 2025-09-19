@@ -60,4 +60,38 @@ public class LivroService {
 		return resultados;
 	};
 
+	public List<Livro> buscarEOrdenar(String titulo, String autor, Integer ano, Genero genero, String ordenarPor) {
+		List<Livro> resultados = new ArrayList<>();
+		for (Livro livro : livros) {
+			boolean match = true;
+			if (titulo != null && !livro.getTitulo().equalsIgnoreCase(titulo))
+				match = false;
+			if (autor != null && !livro.getAutor().equalsIgnoreCase(autor))
+				match = false;
+			if (ano != null && !livro.getAno().equals(ano))
+				match = false;
+			if (genero != null && livro.getGenero() != genero)
+				match = false;
+
+			if (match)
+				resultados.add(livro);
+		}
+
+		if (ordenarPor != null) {
+			switch (ordenarPor.toLowerCase()) {
+			case "titulo":
+				resultados.sort((a, b) -> a.getTitulo().compareToIgnoreCase(b.getTitulo()));
+				break;
+			case "autor":
+				resultados.sort((a, b) -> a.getAutor().compareToIgnoreCase(b.getAutor()));
+				break;
+			case "ano":
+				resultados.sort((a, b) -> a.getAno().compareTo(b.getAno()));
+				break;
+			}
+		}
+
+		return resultados;
+	};
+
 }
