@@ -1,9 +1,30 @@
 package model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "tb_livro")
 public class Livro {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Integer id;
+	@Column(name = "titulo")
 	private String titulo;
+	@Column(name = "autor")
 	private String autor;
+	@Column(name = "ano")
 	private Integer ano;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "genero")
 	private Genero genero;
 
 	public Livro() {
@@ -44,8 +65,22 @@ public class Livro {
 		return genero;
 	}
 
-	public Genero setGenero(Genero genero) {
-		return this.genero = genero;
+	public void setGenero(Genero genero) {
+		this.genero = genero;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
+
+	
+	
+	
 }
+
+
