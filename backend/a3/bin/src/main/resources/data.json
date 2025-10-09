@@ -42,12 +42,6 @@
 		"genero": "FICCAO_CIENTIFICA"
 	},
 	{
-			"titulo": "A Revolução dos Bichos",
-			"autor": "George Orwell",
-			"ano": 1945,
-			"genero": "FICCAO_CIENTIFICA"
-	},
-	{
 		"titulo": "1984",
 		"autor": "George Orwell",
 		"ano": 1949,
