@@ -38,6 +38,6 @@ O sistema permite:
 
 - **Java**  
 - **Spring Boot**  
-- **Lista em memória** para armazenamento temporário dos livros.  
+- **Banco H2**
 - **JSON** para envio e recebimento de dados via API.  
 
