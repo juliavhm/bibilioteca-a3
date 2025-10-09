@@ -1,4 +1,4 @@
-package model;
+package a3.model;
 
 public enum Genero {
     FANTASIA,

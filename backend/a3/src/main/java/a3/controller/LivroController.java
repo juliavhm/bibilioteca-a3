@@ -1,4 +1,4 @@
-package controller;
+package a3.controller;
 
 import java.util.List;
 
@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import dto.MensagemErro;
-import model.Genero;
-import model.Livro;
-import service.LivroService;
+import a3.dto.MensagemErro;
+import a3.model.Genero;
+import a3.service.LivroService;
+import a3.model.Livro;
 
 @RestController
 @RequestMapping("/livros")
