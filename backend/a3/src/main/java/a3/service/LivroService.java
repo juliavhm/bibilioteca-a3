@@ -49,7 +49,6 @@ public class LivroService {
 		return resultado;
 	}
 
-	// 🔹 Busca linear por ano
 	public List<Livro> buscarPorAnoLinear(Integer ano) {
 		List<Livro> livros = livroRepository.findAll();
 		List<Livro> resultado = new ArrayList<>();
@@ -110,6 +109,7 @@ public class LivroService {
 		}
 
 		Livro livroExistente = livro.get();
+
 		if (livroAtualizado.getTitulo() != null && !livroAtualizado.getTitulo().isBlank()) {
 			livroExistente.setTitulo(livroAtualizado.getTitulo());
 		}
@@ -120,11 +120,7 @@ public class LivroService {
 		return livroRepository.save(livroExistente);
 	}
 
-	// 🔹 Deletar livro
 	public void deletarLivro(Integer id) {
-		if (livroRepository.findById(id) != null) {
-			livroRepository.deleteById(id);
-		}
-
+		livroRepository.deleteById(id);
 	}
 }
