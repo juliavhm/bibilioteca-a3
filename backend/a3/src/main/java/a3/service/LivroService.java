@@ -1,75 +1,138 @@
 package a3.service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import a3.model.Genero;
 import a3.model.Livro;
 import a3.repository.LivroRepository;
+import a3.utils.RecursoNaoEncontradoException;
 
 @Service
 public class LivroService {
 
-    private final LivroRepository livroRepository;
+	@Autowired
+	private LivroRepository livroRepository;
 
-    // injeção automática do repository
-    public LivroService(LivroRepository livroRepository) {
-        this.livroRepository = livroRepository;
-    }
+	public List<Livro> listarLivros() {
+		List<Livro> livros = livroRepository.findAll();
 
-    public void adicionarLivro(Livro livro) {
-        livroRepository.save(livro);
-    }
+		if (livros.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Lista vazia, adicione algum livro.");
+		}
+		return livros;
 
-    public List<Livro> listarLivros() {
-        return livroRepository.findAll();
-    }
+	}
 
-    public List<Livro> buscarPorAnoLinear(Integer ano) {
-        return livroRepository.findByAno(ano);
-    }
+	public void adicionarLivro(Livro livro) {
 
-    public List<Livro> buscarPorAutorLinear(String autor) {
-        return livroRepository.findByAutorIgnoreCase(autor);
-    }
+		if (livro.getTitulo() == null || livro.getTitulo().isBlank()) {
+			throw new IllegalArgumentException("Título é obrigatório");
+		}
+		if (livro.getAutor() == null || livro.getAutor().isBlank()) {
+			throw new IllegalArgumentException("Autor é obrigatório");
+		}
+		if (livro.getAno() == null) {
+			throw new IllegalArgumentException("Ano é obrigatório");
+		}
+		if (livro.getGenero() == null) {
+			throw new IllegalArgumentException("Gênero é obrigatório");
+		}
 
-    public Livro buscarPorTituloLinear(String titulo) {
-        return livroRepository.findByTitulo(titulo);
-    }
+		livroRepository.save(livro);
+	}
 
-    public List<Livro> buscarPorGenero(Genero genero) {
-        return livroRepository.findByGenero(genero);
-    }
+	public Livro buscarPorTitulo(String titulo) {
+		Livro livro = livroRepository.findByTitulo(titulo);
+		if (livro == null) {
+			throw new RecursoNaoEncontradoException("Livro com título '" + titulo + "' não encontrado");
+		}
+		return livro;
+	}
 
-    public List<Livro> buscarEOrdenar(String titulo, String autor, Integer ano, Genero genero, String ordenarPor) {
-        List<Livro> resultados = livroRepository.findAll();
+	public List<Livro> buscarPorAutor(String autor) {
+		List<Livro> livro = livroRepository.findByAutorIgnoreCase(autor);
+		if (livro.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Autor com nome '" + autor + "' não encontrado");
+		}
+		return livro;
+	}
 
-        // filtros manuais (opcional, igual ao seu código antigo)
-        if (titulo != null)
-            resultados.removeIf(l -> !l.getTitulo().equalsIgnoreCase(titulo));
-        if (autor != null)
-            resultados.removeIf(l -> !l.getAutor().equalsIgnoreCase(autor));
-        if (ano != null)
-            resultados.removeIf(l -> !l.getAno().equals(ano));
-        if (genero != null)
-            resultados.removeIf(l -> l.getGenero() != genero);
+	public List<Livro> buscarPorAno(Integer ano) {
+		List<Livro> livro = livroRepository.findByAno(ano);
+		if (livro.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Não há nenhum livro com o ano '" + ano + "' disponível");
+		}
+		return livro;
+	}
 
-        // ordenação opcional
-        if (ordenarPor != null) {
-            switch (ordenarPor.toLowerCase()) {
-                case "titulo":
-                    resultados.sort((a, b) -> a.getTitulo().compareToIgnoreCase(b.getTitulo()));
-                    break;
-                case "autor":
-                    resultados.sort((a, b) -> a.getAutor().compareToIgnoreCase(b.getAutor()));
-                    break;
-                case "ano":
-                    resultados.sort((a, b) -> a.getAno().compareTo(b.getAno()));
-                    break;
-            }
-        }
+	public List<Livro> buscarPorGenero(Genero genero) {
+		List<Livro> livro = livroRepository.findByGenero(genero);
+		if (livro.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Nenhum livro com o gênero '" + genero + "' disponível");
+		}
+		return livroRepository.findByGenero(genero);
+	}
 
-        return resultados;
-    }
+	public Livro atualizarLivro(Integer id, Livro livroAtualizado) {
+		Optional<Livro> livro = livroRepository.findById(id);
+
+		if (livro.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Livro com ID " + id + " não encontrado");
+		}
+
+		Livro livroExistente = livro.get();
+
+		if (livroAtualizado.getTitulo() != null && !livroAtualizado.getTitulo().isBlank()) {
+			livroExistente.setTitulo(livroAtualizado.getTitulo());
+		}
+
+		if (livroAtualizado.getAutor() != null && !livroAtualizado.getAutor().isBlank()) {
+			livroExistente.setAutor(livroAtualizado.getAutor());
+		}
+		return livroRepository.save(livroExistente);
+	}
+
+	public void deletarLivro(Integer id) {
+		Optional<Livro> livro = livroRepository.findById(id);
+
+		if (livro.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Livro com ID " + id + " não encontrado");
+		}
+
+		livroRepository.delete(livro.get());
+	}
+
+	public List<Livro> buscarEOrdenar(String titulo, String autor, Integer ano, Genero genero, String ordenar) {
+		List<Livro> livros = livroRepository.findAll();
+
+		List<Livro> filtrados = livros.stream().filter(l -> (titulo == null || l.getTitulo().equalsIgnoreCase(titulo)))
+				.filter(l -> (autor == null || l.getAutor().equalsIgnoreCase(autor)))
+				.filter(l -> (ano == null || (l.getAno() != null && l.getAno().equals(ano))))
+				.filter(l -> (genero == null || l.getGenero() == genero)).collect(Collectors.toList());
+
+		// Ordenação opcional
+		if (ordenar != null) {
+			switch (ordenar.toLowerCase()) {
+			case "titulo":
+				filtrados.sort(Comparator.comparing(Livro::getTitulo, String.CASE_INSENSITIVE_ORDER));
+				break;
+			case "autor":
+				filtrados.sort(Comparator.comparing(Livro::getAutor, String.CASE_INSENSITIVE_ORDER));
+				break;
+			case "ano":
+				filtrados.sort(Comparator.comparing(Livro::getAno));
+				break;
+			default:
+				break;
+			}
+		}
+
+		return filtrados;
+	}
 }
