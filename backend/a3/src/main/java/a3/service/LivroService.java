@@ -1,6 +1,5 @@
 package a3.service;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import a3.model.Genero;
 import a3.model.Livro;
 import a3.repository.LivroRepository;
+import a3.utils.RecursoNaoEncontradoException;
 
 @Service
 public class LivroService {
@@ -20,58 +20,92 @@ public class LivroService {
 	private LivroRepository livroRepository;
 
 	public List<Livro> listarLivros() {
-		return livroRepository.findAll();
+		List<Livro> livros = livroRepository.findAll();
+
+		if (livros.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Lista vazia, adicione algum livro.");
+		}
+		return livros;
+
 	}
 
 	public void adicionarLivro(Livro livro) {
+
+		if (livro.getTitulo() == null || livro.getTitulo().isBlank()) {
+			throw new IllegalArgumentException("Título é obrigatório");
+		}
+		if (livro.getAutor() == null || livro.getAutor().isBlank()) {
+			throw new IllegalArgumentException("Autor é obrigatório");
+		}
+		if (livro.getAno() == null) {
+			throw new IllegalArgumentException("Ano é obrigatório");
+		}
+		if (livro.getGenero() == null) {
+			throw new IllegalArgumentException("Gênero é obrigatório");
+		}
+
 		livroRepository.save(livro);
 	}
 
-	public Livro buscarPorTituloLinear(String titulo) {
-		List<Livro> livros = livroRepository.findAll();
-		for (Livro livro : livros) {
-			if (livro.getTitulo().equalsIgnoreCase(titulo)) {
-				return livro;
-			}
+	public Livro buscarPorTitulo(String titulo) {
+		Livro livro = livroRepository.findByTitulo(titulo);
+		if (livro == null) {
+			throw new RecursoNaoEncontradoException("Livro com título '" + titulo + "' não encontrado");
 		}
-		return null;
+		return livro;
 	}
 
-	public List<Livro> buscarPorAutorLinear(String autor) {
-		List<Livro> livros = livroRepository.findAll();
-		List<Livro> resultado = new ArrayList<>();
-
-		for (Livro livro : livros) {
-			if (livro.getAutor().equalsIgnoreCase(autor)) {
-				resultado.add(livro);
-			}
+	public List<Livro> buscarPorAutor(String autor) {
+		List<Livro> livro = livroRepository.findByAutorIgnoreCase(autor);
+		if (livro.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Autor com nome '" + autor + "' não encontrado");
 		}
-		return resultado;
+		return livro;
 	}
 
-	// 🔹 Busca linear por ano
-	public List<Livro> buscarPorAnoLinear(Integer ano) {
-		List<Livro> livros = livroRepository.findAll();
-		List<Livro> resultado = new ArrayList<>();
-
-		for (Livro livro : livros) {
-			if (livro.getAno() != null && livro.getAno().equals(ano)) {
-				resultado.add(livro);
-			}
+	public List<Livro> buscarPorAno(Integer ano) {
+		List<Livro> livro = livroRepository.findByAno(ano);
+		if (livro.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Não há nenhum livro com o ano '" + ano + "' disponível");
 		}
-		return resultado;
+		return livro;
 	}
 
 	public List<Livro> buscarPorGenero(Genero genero) {
-		List<Livro> livros = livroRepository.findAll();
-		List<Livro> resultado = new ArrayList<>();
-
-		for (Livro livro : livros) {
-			if (livro.getGenero() == genero) {
-				resultado.add(livro);
-			}
+		List<Livro> livro = livroRepository.findByGenero(genero);
+		if (livro.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Nenhum livro com o gênero '" + genero + "' disponível");
 		}
-		return resultado;
+		return livroRepository.findByGenero(genero);
+	}
+
+	public Livro atualizarLivro(Integer id, Livro livroAtualizado) {
+		Optional<Livro> livro = livroRepository.findById(id);
+
+		if (livro.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Livro com ID " + id + " não encontrado");
+		}
+
+		Livro livroExistente = livro.get();
+
+		if (livroAtualizado.getTitulo() != null && !livroAtualizado.getTitulo().isBlank()) {
+			livroExistente.setTitulo(livroAtualizado.getTitulo());
+		}
+
+		if (livroAtualizado.getAutor() != null && !livroAtualizado.getAutor().isBlank()) {
+			livroExistente.setAutor(livroAtualizado.getAutor());
+		}
+		return livroRepository.save(livroExistente);
+	}
+
+	public void deletarLivro(Integer id) {
+		Optional<Livro> livro = livroRepository.findById(id);
+
+		if (livro.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Livro com ID " + id + " não encontrado");
+		}
+
+		livroRepository.delete(livro.get());
 	}
 
 	public List<Livro> buscarEOrdenar(String titulo, String autor, Integer ano, Genero genero, String ordenar) {
@@ -100,31 +134,5 @@ public class LivroService {
 		}
 
 		return filtrados;
-	}
-
-	public Livro atualizarLivro(Integer id, Livro livroAtualizado) {
-		Optional<Livro> livro = livroRepository.findById(id);
-
-		if (livro.isEmpty()) {
-			return null;
-		}
-
-		Livro livroExistente = livro.get();
-		if (livroAtualizado.getTitulo() != null && !livroAtualizado.getTitulo().isBlank()) {
-			livroExistente.setTitulo(livroAtualizado.getTitulo());
-		}
-
-		if (livroAtualizado.getAutor() != null && !livroAtualizado.getAutor().isBlank()) {
-			livroExistente.setAutor(livroAtualizado.getAutor());
-		}
-		return livroRepository.save(livroExistente);
-	}
-
-	// 🔹 Deletar livro
-	public void deletarLivro(Integer id) {
-		if (livroRepository.findById(id) != null) {
-			livroRepository.deleteById(id);
-		}
-
 	}
 }
