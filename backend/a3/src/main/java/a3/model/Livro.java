@@ -76,10 +76,4 @@ public class Livro {
 		this.id = id;
 	}
 	
-
-	
-	
-	
 }
-
-
