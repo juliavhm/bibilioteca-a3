@@ -48,11 +48,8 @@ public class LivroService {
 	}
 
 	public Livro buscarPorTitulo(String titulo) {
-		Livro livro = livroRepository.findByTitulo(titulo);
-		if (livro == null) {
-			throw new RecursoNaoEncontradoException("Livro com título '" + titulo + "' não encontrado");
-		}
-		return livro;
+		return livroRepository.findByTitulo(titulo).orElseThrow(
+				() -> new RecursoNaoEncontradoException("Livro com título '" + titulo + "' não encontrado"));
 	}
 
 	public List<Livro> buscarPorAutor(String autor) {
