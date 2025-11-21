@@ -7,5 +7,6 @@ public enum Genero {
     FICCAO_CIENTIFICA,
     TERROR,
     DRAMA,
-    DOCUMENTAL
+    DOCUMENTAL,
+    SUSPENSE
 };
