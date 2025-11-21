@@ -60,19 +60,19 @@ public class LivroController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deletarLivro(@PathVariable Integer id) {
+	public ResponseEntity<Void> deletarLivro(@PathVariable("id") Integer id) {
 		livroService.deletarLivro(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/buscar")
-	public ResponseEntity<?> buscarEOrdenar(@RequestParam(required = false) String titulo,
-			@RequestParam(required = false) String autor, @RequestParam(required = false) Integer ano,
-			@RequestParam(required = false) Genero genero, @RequestParam(required = false) String ordenar) {
+	public ResponseEntity<?> buscarEOrdenar(@RequestParam(name = "titulo", required = false) String titulo,
+			@RequestParam(name = "autor", required = false) String autor,
+			@RequestParam(name = "ano", required = false) Integer ano,
+			@RequestParam(name = "genero", required = false) Genero genero,
+			@RequestParam(name = "ordenar", required = false) String ordenar) {
 
 		List<Livro> resultados = livroService.buscarEOrdenar(titulo, autor, ano, genero, ordenar);
-
 		return ResponseEntity.ok(resultados);
 	}
-
 }
