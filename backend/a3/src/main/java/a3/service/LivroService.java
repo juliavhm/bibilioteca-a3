@@ -29,6 +29,17 @@ public class LivroService {
 
 	}
 
+	public List<Livro> listarLivrosDecrescenteId() {
+		Sort sortByIdDesc = Sort.by(Sort.Direction.DESC, "id");
+		List<Livro> livrosDesc = livroRepository.findAll(sortByIdDesc);
+		
+		if (livrosDesc.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Lista vazia, adicione algum livro.");
+		}
+		
+		return livrosDesc;
+	}
+
 	public void adicionarLivro(Livro livro) {
 
 		if (livro.getTitulo() == null || livro.getTitulo().isBlank()) {
