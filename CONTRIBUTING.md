@@ -41,7 +41,7 @@ Antes de começar, você precisa ter instalado:
 | GET    | /livros/autor/{autor}           | Busca livros pelo autor                                                            |     |                            |
 | GET    | /livros/ano/{ano}               | Busca livros pelo ano                                                              |     |                            |
 | GET    | /livros/genero/{genero}         | Busca livros pelo gênero                                                           |     |                            |
-| GET    | /livros/desc |                  | Busca livros em ordem ID Decrescente
+| GET    | /livros/desc |                  | Busca livros em ordem ID Decrescente                                               |     |
 
 
 * A aplicação rodará em http://localhost:8080/.
