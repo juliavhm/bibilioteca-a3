@@ -28,6 +28,8 @@ public class Mocks implements CommandLineRunner {
 
 				new Livro("O Senhor dos Anéis", "J.R.R. Tolkien", 1954, Genero.FANTASIA),
 
+				new Livro("O messias de Duna", "Frank Herbert", 1968, Genero.FICCAO_CIENTIFICA),
+
 				new Livro("Duna", "Frank Herbert", 1965, Genero.FICCAO_CIENTIFICA),
 
 				new Livro("Harry Potter e a Pedra Filosofal", "J.K. Rowling", 1997, Genero.FANTASIA),
@@ -36,9 +38,7 @@ public class Mocks implements CommandLineRunner {
 
 				new Livro("A Revolução dos Bichos", "George Orwell", 1945, Genero.FICCAO_CIENTIFICA),
 
-				new Livro("1984", "George Orwell", 1949, Genero.FICCAO_CIENTIFICA),
-
-				new Livro("O messias de Duna", "Frank Herbert", 1968, Genero.FICCAO_CIENTIFICA));
+				new Livro("1984", "George Orwell", 1949, Genero.FICCAO_CIENTIFICA));
 
 		livroRepository.saveAll(livros);
 	}
