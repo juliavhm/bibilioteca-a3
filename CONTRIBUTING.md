@@ -35,13 +35,12 @@ Antes de começar, você precisa ter instalado:
 | Método | URL                             | Descrição                                                                          |     |                            |
 | ------ | ------------------------------- | ---------------------------------------------------------------------------------- | --- | -------------------------- |
 | GET    | /livros                         | Lista todos os livros                                                              |     |                            |
-| POST   | /livros                         | Adiciona livros (body em JSON)                                                     |     |                            |
+| POST   | /livros                         | Adiciona livros  / body em JSON : (`titulo`, `autor`, `ano`, `genero`)                                                     |     |                            |
 | GET    | /livros/buscar                  | Busca livros com filtros opcionais (`titulo`, `autor`, `ano`, `genero`, `ordenar`) |     |                            |
 | GET    | /livros/titulo/{titulo}         | Busca livro pelo título                                                            |     |                            |
 | GET    | /livros/autor/{autor}           | Busca livros pelo autor                                                            |     |                            |
 | GET    | /livros/ano/{ano}               | Busca livros pelo ano                                                              |     |                            |
 | GET    | /livros/genero/{genero}         | Busca livros pelo gênero                                                           |     |                            |
-| GET    | /livros/ordenar?criterio=titulo | autor                                                                              | ano | Ordena livros por critério |
 
-
+ 
 * A aplicação rodará em http://localhost:8080/.

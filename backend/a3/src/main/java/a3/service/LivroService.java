@@ -7,11 +7,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
 
 import a3.model.Genero;
 import a3.model.Livro;
 import a3.repository.LivroRepository;
 import a3.utils.RecursoNaoEncontradoException;
+
 
 @Service
 public class LivroService {
@@ -25,8 +27,20 @@ public class LivroService {
 		if (livros.isEmpty()) {
 			throw new RecursoNaoEncontradoException("Lista vazia, adicione algum livro.");
 		}
+
 		return livros;
 
+	}
+
+	public List<Livro> listarLivrosDecrescenteId() {
+		Sort sortByIdDesc = Sort.by(Sort.Direction.DESC, "id");
+		List<Livro> livrosDesc = livroRepository.findAll(sortByIdDesc);
+		
+		if (livrosDesc.isEmpty()) {
+			throw new RecursoNaoEncontradoException("Lista vazia, adicione algum livro.");
+		}
+		
+		return livrosDesc;
 	}
 
 	public void adicionarLivro(Livro livro) {

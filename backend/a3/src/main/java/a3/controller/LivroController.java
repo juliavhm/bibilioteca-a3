@@ -23,6 +23,12 @@ public class LivroController {
 		return livroService.listarLivros();
 	}
 
+	@GetMapping("/desc") 
+    public List<Livro> listarLivrosDecrescente() {
+        
+        return livroService.listarLivrosDecrescenteId(); 
+    }
+
 	@PostMapping
 	public ResponseEntity<Void> adicionarLivro(@RequestBody Livro livro) {
 		livroService.adicionarLivro(livro);
