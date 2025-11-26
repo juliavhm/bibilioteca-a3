@@ -14,7 +14,6 @@ import a3.model.Livro;
 import a3.repository.LivroRepository;
 import a3.utils.RecursoNaoEncontradoException;
 
-
 @Service
 public class LivroService {
 
@@ -32,15 +31,24 @@ public class LivroService {
 
 	}
 
-	public List<Livro> listarLivrosDecrescenteId() {
-		Sort sortByIdDesc = Sort.by(Sort.Direction.DESC, "id");
-		List<Livro> livrosDesc = livroRepository.findAll(sortByIdDesc);
-		
-		if (livrosDesc.isEmpty()) {
+	public List<Livro> listarLivrosOrdenado(String campo, String direcao) {
+
+		if (campo == null || campo.isBlank()) {
+			campo = "id";
+		}
+
+		Sort.Direction sortDirection = (direcao != null && direcao.equalsIgnoreCase("desc")) ? Sort.Direction.DESC
+				: Sort.Direction.ASC;
+
+		Sort sort = Sort.by(sortDirection, campo);
+
+		List<Livro> livros = livroRepository.findAll(sort);
+
+		if (livros.isEmpty()) {
 			throw new RecursoNaoEncontradoException("Lista vazia, adicione algum livro.");
 		}
-		
-		return livrosDesc;
+
+		return livros;
 	}
 
 	public void adicionarLivro(Livro livro) {

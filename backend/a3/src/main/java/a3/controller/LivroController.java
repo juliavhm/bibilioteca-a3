@@ -19,15 +19,11 @@ public class LivroController {
 	private LivroService livroService;
 
 	@GetMapping
-	public List<Livro> listarLivros() {
-		return livroService.listarLivros();
-	}
+	public List<Livro> listarLivros(@RequestParam(name = "ordenar", required = false) String ordenar,
+			@RequestParam(name = "direcao", required = false) String direcao) {
 
-	@GetMapping("/desc") 
-    public List<Livro> listarLivrosDecrescente() {
-        
-        return livroService.listarLivrosDecrescenteId(); 
-    }
+		return livroService.listarLivrosOrdenado(ordenar, direcao);
+	}
 
 	@PostMapping
 	public ResponseEntity<Void> adicionarLivro(@RequestBody Livro livro) {
