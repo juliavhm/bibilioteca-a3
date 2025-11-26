@@ -22,7 +22,6 @@ O sistema permite:
 ## Funcionalidades Principais
 
 1. **Cadastro de Livros**  
-   - Possibilidade de adicionar um único livro ou **uma lista de livros de uma vez**.  
    - Todos os livros são armazenados em memória para fins didáticos.  
 
 2. **Consulta e Busca**  
