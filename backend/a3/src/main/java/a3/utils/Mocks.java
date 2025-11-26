@@ -36,8 +36,6 @@ public class Mocks implements CommandLineRunner {
 
 				new Livro("A Revolução dos Bichos", "George Orwell", 1945, Genero.FICCAO_CIENTIFICA),
 
-				new Livro("A Revolução dos Bichos", "George Orwell", 1945, Genero.FICCAO_CIENTIFICA),
-
 				new Livro("1984", "George Orwell", 1949, Genero.FICCAO_CIENTIFICA));
 
 		livroRepository.saveAll(livros);
